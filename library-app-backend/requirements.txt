@@ -1,0 +1,16 @@
+transformers
+torch
+huggingface_hub
+flask
+flask-cors
+flask_sqlalchemy
+huggingface_hub
+flash_attn==2.5.8
+accelerate==0.31.0
+react-dropzone
+dotenv
+sequelize
+axios
+sqlite3
+pytest
+pytest-flask
