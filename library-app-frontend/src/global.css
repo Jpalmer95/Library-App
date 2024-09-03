@@ -1,0 +1,241 @@
+/* global.css */
+
+/* Reset and global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: #003366; /* Darker blue */
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #001a33; /* Even darker blue on hover */
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #003366; /* Darker blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #011222; /* Even darker blue on hover */
+}
+
+button:focus {
+    border: 3px solid white;
+}
+
+/* General styling for form labels and inputs */
+form label {
+    display: block; /* Labels as block elements to force new line */
+    margin-bottom: 5px; /* 5px spacing between label and input */
+}
+
+form input {
+    display: block; /* Ensure inputs are block elements to force new line */
+    width: 100%; /* Make input boxes span the full width of their container */
+    box-sizing: border-box; /* Include padding and border in the element’s total width and height */
+    padding: 8px; /* Add some padding inside the input box */
+    margin-bottom: 10px; /* Add spacing between input boxes */
+}
+
+form {
+    max-width: 400px; /* Max-width for better alignment */
+}
+
+/* Layout and container styles */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    background-color: #161616; /* Dark grey nav header bar */
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin-right: 15px;
+}
+
+nav ul li a {
+    color: white;
+    font-weight: bold;
+}
+
+/* Center main content */
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Adjust as needed for the page content */
+}
+
+/* BookList styles */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 Columns. Change first repeat() variable to change column # */
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Styling for each book tile */
+.book-tile {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-delete-buttons {
+    display: flex;
+    flex-direction: row; 
+}
+
+.edit-delete-buttons-center-spacing {
+    padding-right: 25px;
+}
+
+/* Styling for book images */
+.book-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Styling for the image uploader area */
+.image-uploader {
+    border: 2px dashed #007BFF;
+    padding: 20px;
+    margin-top: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Chatbot styles */
+.chatbot-window {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 25%;
+    height: 89%;  /* Keep height fixed for current implementation */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;  /* Ensure that overflow doesn't spill */
+}
+
+
+.chatbot-header {
+    background-color: #003366;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.chatbot-body {
+    flex-grow: 1;  /* Chatbot body fills available space */
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 65vh;  /* Adjust this according to the height of the chatbot */
+}
+
+
+.chatbot-footer {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+/* Skip link styles */
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #003366;
+    color: white;
+    padding: 10px;
+    z-index: 1000;
+    text-align: center;
+    border-radius: 4px;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+    border: 2px solid white;
+}
+
+
+/* Error styles for form fields */
+input.error,
+textarea.error {
+    border: 2px solid red;
+    background-color: #fdd;
+}
+
+/* Error styling for form inputs */
+.error-input {
+    border: 1px solid red;
+}
+
+/* General form group styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Styling for error messages */
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 5px;
+    display: block;
+}
