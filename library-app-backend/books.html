@@ -4,21 +4,35 @@
     <meta charset="UTF-8">
     <title>Library Books</title>
     <script>
+        // Define a function to load the list of books from the server
         function loadBooks() {
+            // Send a GET request to the /books endpoint to retrieve the list of books
             fetch('/books')
+                // Parse the response data as JSON
                 .then(response => response.json())
+                // Process the parsed data
                 .then(data => {
+                    // Get a reference to the element that will display the list of books
                     const bookList = document.getElementById('bookList');
+                    
+                    // Clear the existing list of books
                     bookList.innerHTML = '';
+                    
+                    // Iterate over the list of books and create a new list item for each book
                     data.forEach(book => {
+                        // Create a new list item element
                         const li = document.createElement('li');
+                        
+                        // Set the inner HTML of the list item to display the book's title, author, year, and genre
                         li.innerHTML = `<strong>${book.title}</strong> by ${book.author} - ${book.year} - ${book.genre}`;
+                        
+                        // Add the list item to the book list
                         bookList.appendChild(li);
                     });
                 });
         }
     
-        // Load books when the page loads
+        // Load the list of books when the page finishes loading
         window.onload = loadBooks;
     </script>
 </head>

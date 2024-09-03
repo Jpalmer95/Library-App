@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
+# Create a new Flask app
 app = Flask(__name__)
 CORS(app)  # This will enable CORS for all routes
 
@@ -15,20 +16,35 @@ load_dotenv()
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///books.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Create a new SQLAlchemy instance
 db = SQLAlchemy(app)
 
+# Define the Book model
 class Book(db.Model):
+    """
+    Represents a book in the database.
+    """
+    # Unique identifier for each book
     id = db.Column(db.Integer, primary_key=True)
+    # Title of the book
     title = db.Column(db.String(100), nullable=False)
+    # Author of the book
     author = db.Column(db.String(100), nullable=False)
+    # Year the book was published
     year = db.Column(db.Integer)
+    # Genre of the book
     genre = db.Column(db.String(50))
 
+    # Define a unique constraint on the title and author columns
     __table_args__ = (
         db.UniqueConstraint('title', 'author', name='unique_book'),
     )
 
+    # Method to convert the book to a dictionary
     def to_dict(self):
+        """
+        Returns a dictionary representation of the book.
+        """
         return {
             'id': self.id,
             'title': self.title,
@@ -39,6 +55,7 @@ class Book(db.Model):
 
 # Function to add sample books if the database is empty
 def add_sample_books():
+    # Define a list of sample books
     sample_books = [
         {"title": "The Hitchhiker's Guide to the Galaxy", "author": "Douglas Adams", "year": 1979, "genre": "Sci-Fi"},
         {"title": "To Kill a Mockingbird", "author": "Harper Lee", "year": 1960, "genre": "Fiction"},
@@ -57,38 +74,55 @@ def add_sample_books():
         {"title": "Green Eggs and Ham", "author": "Dr. Seuss", "year": 1960, "genre": "Childrens"}
     ]
     
+    # Iterate over the sample books and add them to the database
     for book_data in sample_books:
+        # Check if the book already exists in the database
         existing_book = Book.query.filter_by(title=book_data['title'], author=book_data['author']).first()
         if not existing_book:
+            # Create a new book instance
             new_book = Book(
                 title=book_data['title'],
                 author=book_data['author'],
                 year=book_data.get('year'),
                 genre=book_data.get('genre')
             )
+            # Add the book to the database session
             db.session.add(new_book)
     
+    # Commit the changes to the database
     db.session.commit()
 
 # Hugging Face API settings
 HF_API_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3.1-70B-Instruct"
 HF_API_TOKEN = os.getenv('HUGGING_FACE_API_TOKEN')
 
+
 # Function to get a response from the Hugging Face API
 def query_huggingface_api(payload):
+    # Define the API headers
     headers = {
         "Authorization": f"Bearer {HF_API_TOKEN}"
     }
+    # Make a POST request to the API
     response = requests.post(HF_API_URL, headers=headers, json=payload)
+    # Check if the response was successful
     if response.status_code == 200:
+        # Return the response data
         return response.json()
     else:
+        # Raise an exception if the response was not successful
         raise Exception(f"Error from Hugging Face API: {response.status_code}, {response.text}")
+
 
 # Chatbot endpoint
 @app.route('/chat', methods=['POST'])
 def chat():
+    """
+    Handles chatbot requests.
+    """
+    # Get the request data
     data = request.get_json()
+    # Get the user message and selected book from the request data
     user_message = data.get('message', '')
     selected_book = data.get('book', None)
 
@@ -118,7 +152,8 @@ def chat():
     
 
 # Book Functionalities
-# Add book to the database
+
+# Add book to the database (POST request)
 @app.route('/books', methods=['POST'])
 def add_book():
     data = request.json
@@ -130,13 +165,13 @@ def add_book():
     db.session.commit()
     return jsonify(new_book.to_dict()), 201
 
-# Get all books
+# Get all books (GET request)
 @app.route('/books', methods=['GET'])
 def get_books():
     all_books = Book.query.all()
     return jsonify([book.to_dict() for book in all_books])
 
-# Get a single book by ID
+# Get a single book by ID (GET request)
 @app.route('/books/<int:book_id>', methods=['GET'])
 def get_book(book_id):
     book = Book.query.get(book_id)
@@ -144,7 +179,7 @@ def get_book(book_id):
         return jsonify({"error": "Book not found"}), 404
     return jsonify(book.to_dict())
 
-# Edit a book by ID
+# Edit a book by ID (PUT request)
 @app.route('/books/<int:book_id>', methods=['PUT'])
 def update_book(book_id):
     book = Book.query.get(book_id)
@@ -164,7 +199,7 @@ def update_book(book_id):
     db.session.commit()
     return jsonify(book.to_dict()), 200
 
-# Delete a book by ID
+# Delete a book by ID (DELETE request)
 @app.route('/books/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
     book = Book.query.get(book_id)
@@ -175,7 +210,7 @@ def delete_book(book_id):
     db.session.commit()
     return '', 204  # No content, successful delete
 
-# Run the app
+# Run the app in debug mode
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Ensure tables are created
